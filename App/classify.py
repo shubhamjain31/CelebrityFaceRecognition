@@ -4,7 +4,7 @@ import json
 import numpy as np
 import base64
 import cv2
-from wavelet import w2d
+from App.wavelet import w2d
 
 __class_name_to_number = {}
 __class_number_to_name = {}
@@ -41,13 +41,13 @@ def load_saved_artifacts():
     global __class_name_to_number
     global __class_number_to_name
 
-    with open("./model_file/class_dictionary.json", "r") as f:
+    with open("App/model_file/class_dictionary.json", "r") as f:
         __class_name_to_number = json.load(f)
         __class_number_to_name = {v:k for k,v in __class_name_to_number.items()}
 
     global __model
     if __model is None:
-        with open('./model_file/saved_model.pkl', 'rb') as f:
+        with open('App/model_file/saved_model.pkl', 'rb') as f:
             __model = joblib.load(f)
     print("loading saved artifacts...done")
 
@@ -60,8 +60,8 @@ def get_cv2_image_from_base64_string(b64str):
     return img
 
 def get_cropped_image_if_2_eyes(image_path, image_base64_data):
-    face_cascade = cv2.CascadeClassifier('./opencv/haarcascades/haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('./opencv/haarcascades/haarcascade_eye.xml')
+    face_cascade = cv2.CascadeClassifier('App/opencv/haarcascades/haarcascade_frontalface_default.xml')
+    eye_cascade = cv2.CascadeClassifier('App/opencv/haarcascades/haarcascade_eye.xml')
 
     if image_path:
         img = cv2.imread(image_path)
@@ -87,6 +87,6 @@ def get_b64_test_image_for_yuvi():
 load_saved_artifacts()
 #print(classify_image(get_b64_test_image_for_yuvi(), None))
 
-print(classify_image(None, "./test_images/Yuvraj.jpg"))
+# print(classify_image(None, "./test_images/Yuvraj.jpg"))
 # print(classify_image(None, "./test_images/Cristiano_Ronaldo.jpg"))
 # print(classify_image(None, "./test_images/Serena Willams.jpg"))
