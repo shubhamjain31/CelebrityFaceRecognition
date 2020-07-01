@@ -17,11 +17,10 @@ function init() {
 
     dz.on("complete", function (file) {
         let imageData = file.dataURL;
-        
-        var url = "http://127.0.0.1:5000/classify_image";
+        var url = "/classify_image/";
 
         $.post(url, {
-            image_data: file.dataURL
+            image_data: file.dataURL,
         },function(data, status) {
             /* 
             Below is a sample response if you have two faces in an image lets say virat and roger together.
@@ -51,21 +50,20 @@ function init() {
                 }
             ]
             */
-            console.log(data);
-            if (!data || data.length==0) {
+            if (!data['Status'] || data['Status'].length==0) {
                 $("#resultHolder").hide();
                 $("#divClassTable").hide();                
                 $("#error").show();
                 return;
             }
-            let players = ["lionel_messi", "maria_sharapova", "roger_federer", "serena_williams", "virat_kohli"];
+            let players = ["cristiano_ronaldo", "serena_williams", "yuvraj_singh"];
             
             let match = null;
             let bestScore = -1;
-            for (let i=0;i<data.length;++i) {
-                let maxScoreForThisClass = Math.max(...data[i].class_probability);
+            for (let i=0;i<data['Status'].length;++i) {
+                let maxScoreForThisClass = Math.max(...data['Status'][i].class_probability);
                 if(maxScoreForThisClass>bestScore) {
-                    match = data[i];
+                    match = data['Status'][i];
                     bestScore = maxScoreForThisClass;
                 }
             }
